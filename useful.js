@@ -1,3 +1,13 @@
+/* Prototype */
+
+if (typeof Object.create !== 'function') {
+    Object.create = function (o) {
+        var F = function () {};
+        F.prototype = o;
+        return new F();
+    };
+}
+
 /* Augmenting Types */
 
 Function.prototype.method = function (name, func) {
@@ -17,6 +27,14 @@ Function.method('curry', function () {
         that = this;
     return function () {
         return that.apply(null, args.concat(slice.apply(arguments)));
+    };
+});
+
+Object.method('superior', function (name) {
+    var that = this,
+        method = that[name];
+    return function () {
+        return method.apply(that, arguments);
     };
 });
 
