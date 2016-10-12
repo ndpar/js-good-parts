@@ -51,3 +51,13 @@ var memoizer = function (memo, fundamental) {
     };
     return shell; // recursive closure
 };
+
+/* Arrays */
+
+var is_array = function (value) {
+    return value &&
+        typeof value === 'object' &&
+        typeof value.length === 'number' &&
+        typeof value.splice === 'function' &&
+        !(value.propertyIsEnumerable('length'));
+};
