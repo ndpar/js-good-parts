@@ -21,9 +21,20 @@ Number.method('integer', function () {
     return Math[this < 0 ? 'ceil' : 'floor'](this);
 });
 
+Function.method('bind', function (that) {
+    // Return a function that will call this function as
+    // though it is a method of that object.
+    var method = this,
+        slice = Array.prototype.slice,
+        args = slice.apply(arguments, [1]);
+    return function () {
+        return method.apply(that, args.concat(slice.apply(arguments, [0])));
+    };
+});
+
 Function.method('curry', function () {
     var slice = Array.prototype.slice,
-        args = slice.apply(arguments),
+        args = slice.apply(arguments), // just to cast arguments to Array
         that = this;
     return function () {
         return that.apply(null, args.concat(slice.apply(arguments)));
@@ -37,6 +48,25 @@ Object.method('superior', function (name) {
         return method.apply(that, arguments);
     };
 });
+
+String.method('entityify', function () {
+    var character = {
+        '<' : '&lt;',
+        '>' : '&gt;',
+        '&' : '&amp;',
+        '"' : '&quot;'
+    };
+    // Return the string.entityify method, which
+    // returns the result of calling the replace method.
+    // Its replaceValue function returns the result of
+    // looking a character up in an object. This use of
+    // an object usually outperforms switch statements.
+    return function () {
+        return this.replace(/[<>&"]/g, function (c) {
+            return character[c];
+        });
+    };
+}());
 
 /* Memoization */
 
