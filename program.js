@@ -10,14 +10,6 @@ var add = function (a, b) {
     return a + b;
 }
 
-/* Augmenting Types */
-
-// prototype method (same as metaclass in Groovy)
-document.writeln((-10 / 3).integer());
-
-// trim already exist in a modern JS
-document.writeln('"' + " neat ".trim() + '"');
-
 // not sure if it is tail-optimized
 var factorial = function factorial(i, a) {
     a = a || 1;
@@ -128,11 +120,6 @@ var serial_maker = function () {
 };
 var seqer = serial_maker().with_prefix('Q').with_seq(1000);
 document.writeln(seqer.gensym());
-
-/* Curry */
-
-var add1 = add.curry(1);
-document.writeln(add1(6));
 
 /* Memoization */
 

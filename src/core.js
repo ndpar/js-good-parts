@@ -18,26 +18,14 @@ Function.prototype.method = function (name, func) {
 };
 
 Number.method('integer', function () {
-    return Math[this < 0 ? 'ceil' : 'floor'](this);
-});
-
-Function.method('bind', function (that) {
-    // Return a function that will call this function as
-    // though it is a method of that object.
-    var method = this,
-        slice = Array.prototype.slice,
-        args = slice.apply(arguments, [1]);
-    return function () {
-        return method.apply(that, args.concat(slice.apply(arguments, [0])));
-    };
+    return Math.trunc(this);
 });
 
 Function.method('curry', function () {
-    var slice = Array.prototype.slice,
-        args = slice.apply(arguments), // just to cast arguments to Array
+    let args = [...arguments], // just to cast arguments to Array
         that = this;
     return function () {
-        return that.apply(null, args.concat(slice.apply(arguments)));
+        return that.apply(null, args.concat([...arguments]));
     };
 });
 
@@ -49,8 +37,10 @@ Object.method('superior', function (name) {
     };
 });
 
+/* Closures */
+
 String.method('entityify', function () {
-    var character = {
+    let character = {
         '<' : '&lt;',
         '>' : '&gt;',
         '&' : '&amp;',
