@@ -1,0 +1,19 @@
+{
+    "name" : "js-good-parts",
+    "version" : "0.0.2",
+    "description" : "JavaScript: The Good Parts",
+    "license" : "Apache-2.0",
+    "repository" :
+    {
+        "type" : "git",
+        "url" : "https://github.com/ndpar/js-good-parts"
+    },
+    "scripts" :
+    {
+        "test" : "jasmine"
+    },
+    "devDependencies" :
+    {
+        "jasmine" : "^2.5.2"
+    }
+}
