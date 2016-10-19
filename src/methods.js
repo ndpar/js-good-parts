@@ -23,3 +23,5 @@ function by(...fields) {
 
     return (o, p) => compare(fields, o, p)
 }
+
+module.exports = by

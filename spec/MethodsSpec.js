@@ -1,3 +1,5 @@
+const by = require('../src/methods')
+
 describe('Array methods', function() {
 
     it('join', function() {
