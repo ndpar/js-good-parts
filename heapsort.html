@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>Heapsort</title>
+	<style>
+        text {
+            font: bold 48px monospace;
+        }
+        .enter {
+            fill: green;
+        }
+        .update {
+            fill: #333;
+        }
+        .exit {
+            fill: brown;
+        }
+	</style>
+	<script type="text/javascript" src="http://d3js.org/d3.v4.min.js"></script>
+</head>
+
+<body>
+    <svg width="800" height="150"></svg>
+
+	<script type="text/javascript">
+        const SLEEP = 900;
+
+        let svg = d3.select("svg"),
+            width = +svg.attr("width"),
+            height = +svg.attr("height"),
+            g = svg.append("g").attr("transform", "translate(32," + (height / 2) + ")");
+
+        function redraw(data) {
+            let t = d3.transition()
+                .duration(SLEEP);
+            let text = g.selectAll("text")
+                .data(data, d => d);
+
+            text.exit()
+                .attr("class", "exit")
+                .transition(t)
+                .attr("y", 60)
+                .style("fill-opacity", 1e-6)
+                .remove();
+
+            text.attr("class", "update")
+                .attr("y", 0)
+                .style("fill-opacity", 1)
+                .transition(t)
+                .attr("x", (d, i) => i * 32);
+
+            text.enter().append("text")
+                .attr("class", "enter")
+                .attr("dy", ".35em")
+                .attr("y", -60)
+                .attr("x", (d, i) => i * 32)
+                .style("fill-opacity", 1e-6)
+                .text(d => d)
+                .transition(t)
+                .attr("y", 0)
+                .style("fill-opacity", 1);
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        /* Sorting */
+
+        function parent(i) {
+            return Math.floor((i - 1) / 2);
+        }
+
+        function left(i) {
+            return 2 * i + 1;
+        }
+
+        function right(i) {
+            return 2 * i + 2;
+        }
+
+        function maxHeapify(a, i) {
+            let l = left(i),
+                r = right(i);
+            let largest = l <= a.heapSize - 1 && a[l] > a[i] ? l : i;
+            if (r <= a.heapSize - 1 && a[r] > a[largest]) {
+                largest = r;
+            }
+            if (largest != i) {
+                [a[i], a[largest]] = [a[largest], a[i]];
+                maxHeapify(a, largest);
+            }
+        }
+
+        function buildMaxHeap(a) {
+            a.heapSize = a.length;
+            for (let i = Math.floor(a.length / 2); 0 <= i; i--) {
+                maxHeapify(a, i - 1);
+            }
+        }
+
+        async function heapsort(a) { await sleep(SLEEP); redraw(a);
+            buildMaxHeap(a); await sleep(2 * SLEEP); redraw(a);
+            for (let i = a.length - 1; 1 <= i; i--) {
+                [a[0], a[i]] = [a[i], a[0]]; await sleep(SLEEP); redraw(a);
+                a.heapSize = a.heapSize - 1;
+                maxHeapify(a, 0); await sleep(SLEEP); redraw(a);
+            } await sleep(SLEEP); redraw(a);
+        }
+
+        function demo() {
+            let array = [...Array(10).keys()];
+            d3.shuffle(array);
+            heapsort(array);
+        }
+        demo();
+    </script>
+</body>
+
+</html>
